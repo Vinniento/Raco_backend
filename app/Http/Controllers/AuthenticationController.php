@@ -22,12 +22,12 @@ class AuthenticationController extends Controller
                 $user->password = $request->password;
                 $user->save();
                 return response()->json([
-                    'success' => 'User was created: ' . $user
+                    'success' => 'Account created'
                 ]);
                 //return $this->login($request);
             } else
                 return response()->json([
-                    'success' => 'Failed: user already exists'
+                    'success' => 'Email already in use'
                 ]);
             // return response()->json(['registerData' => $request]);
         } catch (Exception $e) {
@@ -36,14 +36,15 @@ class AuthenticationController extends Controller
     }
     public function login(Request $request)
     {
-        $creds = $request->only('email', 'password');
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::
+        where('email', $request->email)
+        ->where('password', $request->password)
+        ->first();
         if ($user != null) {
             return response()->json(['success' => 'valid']);
         } else {
-            return response()->json(['success' => 'invalid'
-            ]);
+            return response()->json(['success' => 'invalid: ' .$request]);
         }
     }
 }
