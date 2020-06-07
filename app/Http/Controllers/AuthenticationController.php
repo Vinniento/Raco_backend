@@ -44,7 +44,7 @@ class AuthenticationController extends Controller
         if ($user != null) {
             return response()->json(['success' => 'valid']);
         } else {
-            return response()->json(['success' => 'invalid: ' .$request]);
+            return response()->json(['success' => 'invalid']);
         }
     }
 }
