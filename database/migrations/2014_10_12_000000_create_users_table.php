@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('lastname');
             $table->string('email')->unique();
             $table->string('password')->nullable();
-            $table->boolean('isCoach');
+            $table->boolean('isCoach')->default(true);
             $table->boolean('isPlayer')->default(false);
 
             $table->timestamps();

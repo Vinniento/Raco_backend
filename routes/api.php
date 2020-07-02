@@ -17,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('login', 'AuthenticationController@login');
 Route::post('register', 'AuthenticationController@register');
 Route::post('addplayer', 'AuthenticationController@addplayer');
+Route::get('getallplayers', 'AuthenticationController@getAllPlayers');
+Route::post('addtraining', 'AuthenticationController@addtraining');
+Route::get('getalltrainings', 'AuthenticationController@getalltrainings');
+Route::get('getuser', 'AuthenticationController@getuser');

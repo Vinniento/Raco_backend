@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Training;
 use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use DB;
 use Facade\FlareClient\Http\Response;
+use Illuminate\Support\Carbon;
 
 class AuthenticationController extends Controller
 {
@@ -55,6 +57,8 @@ class AuthenticationController extends Controller
                 $player->firstname = $request->firstname;
                 $player->lastname = $request->lastname;
                 $player->email = $request->email;
+                $player->isPlayer = true;
+                $player->isCoach = false;
                 $player->save();
                 return response()->json([
                     'success' => 'Player added to the Team'
@@ -64,7 +68,50 @@ class AuthenticationController extends Controller
                     'success' => 'Player with this Lastname already exists'
                 ]);
         } catch (Exception $e) {
-            return response()->json(['success' => $e]);
+            return $e; //response()->json(['success' => $e]);
         }
+    }
+
+    public function getAllPlayers(){
+        $user = User::where('isPlayer', true)->select('firstname', 'lastname')->get();
+        return response()->json(
+                // 'firstname' => $user->firstname, 'lastname' =>$user->lastname
+                    $user
+        );
+    }
+
+    public function getuser(Request $request){
+        $user = User::where('email', $request->email)->select('firstname', 'lastname', 'email')->first();
+        return response()->json([
+                    'firstname' => $user->firstname, 'lastname' =>$user->lastname, 'email'=>$user->email
+        ]);
+    }
+
+    public function addTraining(Request $request)
+    {
+        $training = new Training();
+        try {
+            if (!Training::find($request->date)) {
+                $training->date =$request->date;
+                $training->time =  $request->time;
+                $training->duration = $request->duration;
+                $training->save();
+                return response()->json([
+                    'success' => 'Training added'
+                ]);
+            } else
+                return response()->json([
+                    'success' => 'Training with this date exists already'
+                ]);
+        } catch (Exception $e) {
+            return $e; //response()->json(['success' => $e]);
+        }
+    }
+
+    public function getalltrainings(){
+        $trainings = Training::select('date', 'time')->get();
+        return response()->json(
+                    $trainings
+        );
     }
 }
